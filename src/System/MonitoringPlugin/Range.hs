@@ -36,7 +36,7 @@ data Range n
           (Value n)
 
 -- | Test if a value belongs to the range.
-within :: (Ord n, Num n) => n -> Range n -> Bool
+within :: Ord n => n -> Range n -> Bool
 within p (Inner v1 v2) = v1 <= v && v <= v2
   where
     v = Fin p
