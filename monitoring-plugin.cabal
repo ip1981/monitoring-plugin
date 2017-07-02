@@ -5,7 +5,8 @@ license: MIT
 license-file: LICENSE
 author: Igor Pashev <pashev.igor@gmail.com>
 maintainer: Igor Pashev <pashev.igor@gmail.com>
-copyright: 2016, Zalora South East Asia Pte. Ltd
+copyright: 2016, Zalora South East Asia Pte. Ltd;
+ 2017, Pashev Igor <pashev.igor@gmail.com>
 category: Web, Monitoring, Metrics
 build-type: Simple
 extra-source-files: README.md ChangeLog.md
@@ -13,7 +14,7 @@ cabal-version: >= 1.20
 
 source-repository head
   type: git
-  location: https://github.com/zalora/monitoring-plugin.git
+  location: https://github.com/ip1981/monitoring-plugin.git
 
 library
     default-language: Haskell2010
