@@ -6,13 +6,13 @@ Defines threshold range according to <https://nagios-plugins.org/doc/guidelines.
  >>> let r2 = read "1" :: Range Double
  >>> let r3 = read "@-1:1" :: Range Double
  >>> let r4 = read "~:" :: Range Integer
- >>> 40 `within` r1
+ >>> 40 `belongs` r1
 False
- >>> 0.5 `within` r2
+ >>> 0.5 `belongs` r2
 True
- >>> 0.5 `within` r3
+ >>> 0.5 `belongs` r3
 False
- >>> (-9999999999999999999) `within` r4
+ >>> (-9999999999999999999) `belongs` r4
 True
  >>> read "0:100" :: Range Int
 100
@@ -27,7 +27,7 @@ Nothing
 -}
 module System.MonitoringPlugin.Range
   ( Range
-  , within
+  , belongs
   ) where
 
 import Data.Maybe (fromJust, fromMaybe)
@@ -41,11 +41,11 @@ data Range n
           (Value n)
 
 -- | Test if a value belongs to the range.
-within :: Ord n => n -> Range n -> Bool
-within p (Inner v1 v2) = v1 <= v && v <= v2
+belongs :: Ord n => n -> Range n -> Bool
+belongs p (Inner v1 v2) = v1 <= v && v <= v2
   where
     v = Fin p
-within p (Outer v1 v2) = v < v1 || v2 < v
+belongs p (Outer v1 v2) = v < v1 || v2 < v
   where
     v = Fin p
 
