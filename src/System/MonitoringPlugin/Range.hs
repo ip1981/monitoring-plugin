@@ -16,17 +16,22 @@ False
 True
  >>> read "0:100" :: Range Int
 100
- >>> read ":100" :: Range Int
-*** Exception: Prelude.read: no parse
+ >>> readMaybe ":100" :: Maybe (Range Int)
+Nothing
  >>> read "~:100" :: Range Int
 ~:100
- >>> read "2:1" :: Range Double
-*** Exception: Prelude.read: no parse
+ >>> readMaybe "2:1" :: Maybe (Range Double)
+Nothing
+ >>> readMaybe "x:y" :: Maybe (Range Double)
+Nothing
 -}
 module System.MonitoringPlugin.Range
   ( Range
   , within
   ) where
+
+import Data.Maybe (fromJust, fromMaybe)
+import Text.Read (readMaybe)
 
 -- | The range. The only way to contruct it is to 'read' a 'String'.
 data Range n
@@ -56,22 +61,24 @@ showRange (Inner v1 v2) =
 
 instance (Num n, Ord n, Read n) => Read (Range n) where
   readsPrec _ [] = []
-  readsPrec _ s = [(r, "") | v1 <= v2]
+  readsPrec _ s = [(r, "") | isValid]
     where
       outter = head s == '@'
+      isValid = fromMaybe False $ (<=) <$> v1 <*> v2
       r =
+        fromJust $
         if outter
-          then Outer v1 v2
-          else Inner v1 v2
-      s' =
+          then Outer <$> v1 <*> v2
+          else Inner <$> v1 <*> v2
+      (s1, s2) =
+        span (/= ':') $
         if outter
           then tail s
           else s
-      (s1, s2) = span (/= ':') s'
       (v1, v2) =
         if null s2
-          then (Fin 0, read s1)
-          else (read s1, read $ tail s2)
+          then (Just $ Fin 0, readMaybe s1)
+          else (readMaybe s1, readMaybe $ tail s2)
 
 data Value n
   = NInf
@@ -87,7 +94,10 @@ instance (Read n) => Read (Value n) where
   readsPrec _ [] = [(PInf, "")]
   readsPrec _ s
     | head s == '~' = [(NInf, tail s)]
-    | otherwise = [(Fin $ read s, "")]
+    | otherwise =
+      case readMaybe s of
+        Just v -> [(Fin v, "")]
+        Nothing -> []
 
 instance (Eq n) => Eq (Value n) where
   Fin a == Fin b = a == b
