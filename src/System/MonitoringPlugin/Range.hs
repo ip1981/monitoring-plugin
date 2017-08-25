@@ -1,7 +1,6 @@
 {-|
 Defines threshold range according to <https://nagios-plugins.org/doc/guidelines.html>.
 
- >>> import System.MonitoringPlugin.Range
  >>> let r1 = read "50:100" :: Range Int
  >>> let r2 = read "1" :: Range Double
  >>> let r3 = read "@-1:1" :: Range Double
