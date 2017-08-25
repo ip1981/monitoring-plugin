@@ -1,27 +1,27 @@
 {-|
 Defines threshold range according to <https://nagios-plugins.org/doc/guidelines.html>.
 
- >>> let r1 = read "50:100" :: Range Int
- >>> let r2 = read "1" :: Range Double
- >>> let r3 = read "@-1:1" :: Range Double
- >>> let r4 = read "~:" :: Range Integer
- >>> 40 `belongs` r1
+>>> let r1 = read "50:100" :: Range Int
+>>> let r2 = read "1" :: Range Double
+>>> let r3 = read "@-1:1" :: Range Double
+>>> let r4 = read "~:" :: Range Integer
+>>> 40 `belongs` r1
 False
- >>> 0.5 `belongs` r2
+>>> 0.5 `belongs` r2
 True
- >>> 0.5 `belongs` r3
+>>> 0.5 `belongs` r3
 False
- >>> (-9999999999999999999) `belongs` r4
+>>> (-9999999999999999999) `belongs` r4
 True
- >>> read "0:100" :: Range Int
+>>> read "0:100" :: Range Int
 100
- >>> readMaybe ":100" :: Maybe (Range Int)
+>>> readMaybe ":100" :: Maybe (Range Int)
 Nothing
- >>> read "~:100" :: Range Int
+>>> read "~:100" :: Range Int
 ~:100
- >>> readMaybe "2:1" :: Maybe (Range Double)
+>>> readMaybe "2:1" :: Maybe (Range Double)
 Nothing
- >>> readMaybe "x:y" :: Maybe (Range Double)
+>>> readMaybe "x:y" :: Maybe (Range Double)
 Nothing
 -}
 module System.MonitoringPlugin.Range
